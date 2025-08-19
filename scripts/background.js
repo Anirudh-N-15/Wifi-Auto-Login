@@ -1,21 +1,21 @@
 // This is the main listener that waits for a tab to be updated.
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     // We only want to act when the tab has finished loading.
-    // 'changeInfo.status' will be 'complete' when the page is fully loaded.
     if (changeInfo.status === 'complete' && tab.url) {
   
-      // IMPORTANT: You must replace this with your Wi-Fi login domain.
-      // It should match the domain you used in your manifest.json.
-      const targetDomain = "http://192.168.42.1";
+      // List of all possible IP addresses for the login page.
+      const targetDomains = ["http://192.168.42.1", "http://192.168.24.1", "http://172.16.32.1"];
   
-      // Check if the tab's URL includes your target domain.
-      if (tab.url.includes(targetDomain)) {
+      // Check if the tab's URL starts with ANY of the IPs in the list.
+      const isTargetPage = targetDomains.some(domain => tab.url.startsWith(domain));
+  
+      if (isTargetPage) {
         console.log(`Target page detected: ${tab.url}. Injecting content script.`);
   
         // If it matches, inject the content.js script into the tab.
         chrome.scripting.executeScript({
-          target: { tabId: tabId }, // Specify which tab to inject into
-          files: ['scripts/content.js']    // Specify which file to inject
+          target: { tabId: tabId },
+          files: ['scripts/content.js']
         })
         .then(() => {
           console.log("Successfully injected the content script.");
