@@ -33,3 +33,18 @@ Instead of typing your credentials every time you connect to Wi-Fi, this extensi
 5. Update the script with your credentials (see below).
 
 ---
+
+
+📌 Example Use Case
+
+Universities/Institutes – Auto-login to campus Wi-Fi without re-entering credentials.
+
+MNC Offices – Skip repetitive captive portal authentication every morning.
+
+🛡️ Disclaimer
+
+This extension is designed for personal productivity.
+
+Use only on networks where you are authorized to access.
+
+Do not use to bypass security policies or access systems without permission.
