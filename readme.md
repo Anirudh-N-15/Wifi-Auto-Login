@@ -35,6 +35,35 @@ Instead of typing your credentials every time you connect to Wi-Fi, this extensi
 ---
 
 
+## 🖥️ Bash Script (Terminal Login)
+
+If you prefer logging in from the terminal (without a browser), use the included `wifi_login.sh` script. It detects the default gateway IP from your network and sends a login request via `curl`.
+
+### Prerequisites
+- `curl` must be installed.
+- A Linux or macOS system with `ip`, `route`, or `netstat` available.
+
+### Usage
+
+```bash
+chmod +x wifi_login.sh
+./wifi_login.sh <user_id> <password>
+```
+
+### Example
+
+```bash
+./wifi_login.sh john.doe MySecretPass
+```
+
+The script will:
+1. Detect your network's default gateway IP.
+2. Warn you if the gateway is not in the known list (but still attempt login).
+3. Send a `curl` POST request with your credentials to `http://<gateway_ip>/login`.
+4. Report whether the login succeeded or failed.
+
+---
+
 📌 Example Use Case
 
 Universities/Institutes – Auto-login to campus Wi-Fi without re-entering credentials.
