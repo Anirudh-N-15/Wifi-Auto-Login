@@ -72,15 +72,24 @@ LOGIN_URL="http://${GATEWAY_IP}/login"
 # ---------- send the login request --------------------------------------------
 echo "Sending login request to $LOGIN_URL ..."
 
+CURL_ERR=$(mktemp)
 HTTP_RESPONSE=$(curl --silent --output /dev/null --write-out "%{http_code}" \
   --max-time 10 \
   --data-urlencode "ft_un=${USER_ID}" \
   --data-urlencode "ft_pd=${PASSWD}" \
-  "$LOGIN_URL" 2>&1) || true
+  "$LOGIN_URL" 2>"$CURL_ERR") || true
+CURL_ERR_MSG=$(cat "$CURL_ERR")
+rm -f "$CURL_ERR"
+
+if ! [[ "$HTTP_RESPONSE" =~ ^[0-9]+$ ]]; then
+  echo "Error: curl request failed."
+  [ -n "$CURL_ERR_MSG" ] && echo "Details: $CURL_ERR_MSG"
+  exit 1
+fi
 
 echo "HTTP response code: $HTTP_RESPONSE"
 
-if [ "$HTTP_RESPONSE" -ge 200 ] 2>/dev/null && [ "$HTTP_RESPONSE" -lt 400 ] 2>/dev/null; then
+if [ "$HTTP_RESPONSE" -ge 200 ] && [ "$HTTP_RESPONSE" -lt 400 ]; then
   echo "Login request sent successfully."
 else
   echo "Login may have failed (HTTP $HTTP_RESPONSE). Check your credentials or network."
