@@ -3,8 +3,12 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     // We only want to act when the tab has finished loading.
     if (changeInfo.status === 'complete' && tab.url) {
   
-      // List of all possible IP addresses for the login page.
-      const targetDomains = ["http://192.168.42.1", "http://192.168.24.1", "http://172.16.32.1"];
+      // List of all possible IP addresses for the login page (both http and https).
+      const targetDomains = [
+        "http://192.168.42.1", "https://192.168.42.1",
+        "http://192.168.24.1", "https://192.168.24.1",
+        "http://172.16.32.1",  "https://172.16.32.1"
+      ];
   
       // Check if the tab's URL starts with ANY of the IPs in the list.
       const isTargetPage = targetDomains.some(domain => tab.url.startsWith(domain));
